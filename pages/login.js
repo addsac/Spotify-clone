@@ -8,7 +8,7 @@ function Login({ providers }) {
       {Object.values(providers).map((provider) => (
         <div key={provider.name}>
           <button
-            className="mt-7 bg-[#18D816] font-medium text-white px-4 py-3 rounded-full hover:opacity-80"
+            className="mt-7 bg-[#18D816] font-medium px-4 py-3 rounded-full hover:opacity-80"
             onClick={() => signIn(provider.id, { callbackUrl: "/" })}
           >
             Accedi con {provider.name}
