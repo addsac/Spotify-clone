@@ -11,7 +11,7 @@ function Login({ providers }) {
             className="mt-7 bg-[#18D816] font-medium text-white px-4 py-3 rounded-full hover:opacity-80"
             onClick={() => signIn(provider.id, { callbackUrl: "/" })}
           >
-            Login with {provider.name}
+            Accedi con {provider.name}
           </button>
         </div>
       ))}
