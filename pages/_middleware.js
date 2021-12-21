@@ -7,15 +7,18 @@ export async function middleware(req) {
 
   const { pathname } = req.nextUrl;
 
-  // Allow the request if the following are true...
-  // 1) It's a request for next-auth session & provider fetching
-  // 2) The token exist
-  if (pathname.includes("/api/auth") || token) {
-    return NextResponse.next();
+  // if user is already signedin, but goes to login page, redirect to home page
+  if(token && pathname === '/login'){
+    return NextResponse.redirect('/');
   }
 
-  // Redirecting the users if they don't have a token and are requesting a protected route
-  if(!token && pathname !== "/login"){
-    return NextResponse.redirect("/login")
+  //if user wants to sign in
+  if(pathname.includes('/api/auth') || token){
+      return NextResponse.next();
+  }
+
+  //redirect to login if there is no token, and are requesting a protected route
+  if(!token && pathname !== '/login'){
+      return NextResponse.redirect('/login');
   }
 }
