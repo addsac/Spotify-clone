@@ -1,7 +1,5 @@
-import { KeyIcon } from "@heroicons/react/outline";
 import NextAuth from "next-auth";
 import SpotifyProvider from "next-auth/providers/spotify";
-import { atRule } from "postcss";
 import spotifyApi, { LOGIN_URL } from "../../../lib/spotify";
 
 async function refreshAccessToken() {
