@@ -9,7 +9,7 @@ function Login({ providers }) {
         <div key={provider.name}>
           <button
             className="mt-7 bg-green-500 font-medium px-4 py-3 rounded-full hover:opacity-80"
-            onClick={() => signIn(provider.id, { callbackUrl: "/asd" })}
+            onClick={() => signIn(provider.id, { callbackUrl: "/" })}
           >
             Accedi con {provider.name}
           </button>
