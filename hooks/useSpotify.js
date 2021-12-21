@@ -17,8 +17,7 @@ function useSpotify() {
         signIn();
       }
 
-      // spotifyApi.setAccessToken(session.user.accessToken); - prima avevo questo ma non va
-      spotifyApi.setAccessToken(session.accessToken);
+      spotifyApi.setAccessToken(session.user.accessToken);
     }
   }, [session]);
 
