@@ -1,29 +1,31 @@
 import NextAuth from "next-auth";
 import SpotifyProvider from "next-auth/providers/spotify";
-import spotifyApi, { LOGIN_URL } from "../../../lib/spotify";
+import spotifyAPI, { LOGIN_URL } from "../../../lib/spotify";
 
-async function refreshAccessToken() {
+//return refreshed_token, if the original token is expired
+const refreshAccessToken = async (token) => {
   try {
-    spotifyApi.setAccessToken(token.accessToken);
-    spotifyApi.setRefreshToken(token.refreshToken);
+    spotifyAPI.setAccessToken(token.accessToken);
+    spotifyAPI.setRefreshToken(token.refreshToken);
 
-    const { body: refreshedToken } = await spotifyApi.refreshAccessToken();
+    //refreshAccessToken() is default from spotify object
+    const { body: refreshedToken } = await spotifyAPI.refreshAccessToken();
+    console.log("REFRESHED TOKEN IS", refreshedToken);
 
     return {
       ...token,
       accessToken: refreshedToken.access_token,
-      accessTokenExpires: Date.now() + refreshedToken.expires_in * 1000, // = 1 hour as 3600 return from spotify API
+      accessTokenExpires: Date.now + refreshedToken.expires_in + 1000, // = 1 hour as 3600 returns from spotify API
+      // if there is refreshed_token, use that else, use token's refresh token
       refreshToken: refreshedToken.refresh_token ?? token.refreshToken,
     };
   } catch (error) {
-    console.error(error);
-
     return {
       ...token,
       error: "RefreshAccessTokenError",
     };
   }
-}
+};
 
 export default NextAuth({
   // Configure one or more authentication providers
@@ -36,33 +38,39 @@ export default NextAuth({
     // ...add more providers here
   ],
   secret: process.env.JWT_SECRET,
+
   pages: {
     signIn: "/login",
   },
+
+  //callback using jwt function
   callbacks: {
     async jwt({ token, account, user }) {
-      // initial sign in
+      // handles 3 scenarios
+
+      //initial signin
       if (account && user) {
         return {
           ...token,
           accessToken: account.access_token,
           refreshToken: account.refresh_token,
           username: account.providerAccountId,
-          accessTokenExpires: account.expires_at * 1000, // we are handling expire expiry times in Milliseconds hence * 1000
+          accessTokenExpires: account.expires_at * 1000,
         };
       }
 
-      // Return previous token if the access token has not expired yet
+      //Return previous token if the access token has not exired yet
       if (Date.now() < token.accessTokenExpires) {
-        console.log("EXISTING ACCESS TOKEN IS VALID");
+        console.log("Existing token is valid");
         return token;
       }
 
-      // Access token has expired, so we need to refresh it
-      console.log("ACCESS TOKEN HAS EXPIRED, REFRESHING...");
+      //access token has expires, refresh token
+      console.log("Access token has expired, refreshing...");
       return await refreshAccessToken(token);
     },
 
+    //  async function for session
     async session({ session, token }) {
       session.user.accessToken = token.accessToken;
       session.user.refreshToken = token.refreshToken;
