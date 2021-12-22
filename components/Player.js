@@ -84,8 +84,8 @@ function Player() {
           className="hidden md:inline h-10 w-10"
         />
         <div>
-          <h3>{songInfo?.name}</h3>
-          <p className="text-xs hidden md:block">
+          <h3 class="text-sm">{songInfo?.name}</h3>
+          <p className="text-xs text-gray-500">
             {songInfo?.artists?.[0]?.name}
           </p>
         </div>
