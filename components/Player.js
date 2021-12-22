@@ -129,7 +129,7 @@ function Player() {
           value={volume}
           min={0}
           max={100}
-          className="w-14 md:w-28"
+          className="w-8 md:w-28"
           onChange={(e) => setVolume(Number(e.target.value))}
         />
         <VolumeUpIcon
