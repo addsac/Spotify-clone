@@ -81,11 +81,11 @@ function Player() {
         <img
           src={songInfo?.album.images?.[0]?.url}
           alt=""
-          className="hidden md:inline h-10 w-10"
+          className="hidden md:inline h-16 w-16"
         />
         <div>
           <h3 class="text-sm">{songInfo?.name}</h3>
-          <p className="text-xs text-gray-500">
+          <p className="text-xs text-gray-300">
             {songInfo?.artists?.[0]?.name}
           </p>
         </div>
